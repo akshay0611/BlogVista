@@ -1,78 +1,125 @@
-'use client'
+"use client"
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { ArrowLeft } from 'lucide-react'
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { useParams } from 'next/navigation'; // Use useParams for Next.js app directory
 
-export default function BlogPostPage() {
-  const router = useRouter()
-  const { id } = router.query // Dynamic route parameter
+type Post = {
+  _id: string;
+  title: string;
+  description: string;
+  content: string;
+  author: string;
+  thumbnail: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export default function PostPage() {
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const params = useParams(); // Get the params from the URL
+  const id = params?.id as string; // Safely access the id property
+
+  useEffect(() => {
+    if (id) {
+      async function fetchPost() {
+        try {
+          const res = await fetch(`/api/blogs/${id}`);
+          if (!res.ok) {
+            throw new Error(`Failed to fetch: ${res.statusText}`);
+          }
+          const data = await res.json();
+          setPost(data.data);
+        } catch (error) {
+          console.error('Error fetching post:', error);
+          setError('Failed to load post. Please try again later.');
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      fetchPost();
+    }
+  }, [id]);
+
+  function formatDate(dateString: string) {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!post) {
+    return <p>Post not found.</p>;
+  }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
       <motion.header
-        className="px-4 lg:px-6 h-16 flex items-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800"
+        className="px-4 lg:px-6 h-16 flex items-center bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Link href="/posts" className="flex items-center">
-          <ArrowLeft className="h-6 w-6 text-gray-600 dark:text-gray-300" />
-          <span className="ml-2 text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
-            Back to Posts
-          </span>
-        </Link>
+        <Button variant="ghost" onClick={() => window.history.back()} className="flex items-center text-blue-600 dark:text-blue-400">
+          <ArrowLeft className="mr-2" />
+          Back to Posts
+        </Button>
       </motion.header>
-      <main className="flex-1 py-12 px-4 md:px-6">
-        <div className="container mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8 text-center"
-          >
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-              Blog Post {id}
-            </h1>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-12"
-          >
-            <Image
-              src={`/placeholder.svg?height=400&width=800&text=Post+${id}`}
-              alt={`Blog post ${id} image`}
-              className="w-full h-64 object-cover rounded-lg shadow-lg"
-              width={800}
-              height={400}
-            />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              This is a detailed description of blog post {id}. It provides in-depth insights and valuable information
-              about the topic. Explore the key aspects, learn from the examples, and enjoy the read!
-            </p>
-          </motion.div>
-        </div>
+
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <motion.h1
+          className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {post.title}
+        </motion.h1>
+
+        <Card className="overflow-hidden dark:bg-gray-800">
+          <CardContent className="p-6">
+            <div className="relative aspect-video mb-6">
+              <img
+                src={post.thumbnail || '/placeholder.svg'}
+                alt={post.title}
+                className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">{post.description}</p>
+            <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+              <span>{post.author}</span>
+              <div className="flex items-center">
+                <Calendar className="w-4 h-4 mr-1" />
+                <span>{formatDate(post.createdAt)}</span>
+              </div>
+            </div>
+            <Separator className="my-4" />
+            <div className="text-gray-600 dark:text-gray-300">{post.content}</div>
+            <div className="flex justify-between items-center mt-6">
+              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                {formatDate(post.updatedAt) !== formatDate(post.createdAt) ? `Updated: ${formatDate(post.updatedAt)}` : 'New'}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
       </main>
-      <motion.footer
-        className="w-full py-6 px-4 md:px-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="container mx-auto text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">© 2025 BlogVista. All rights reserved.</p>
-        </div>
-      </motion.footer>
     </div>
-  )
+  );
 }

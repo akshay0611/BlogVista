@@ -16,12 +16,12 @@ import { ModeToggle } from "@/components/ui/mode-toggle"
 type Post = {
   _id: string;
   title: string;
-  content: string;
+  description: string;
   author: string;
   thumbnail: string;
   createdAt: string;
   updatedAt: string;
-};
+}; 
 
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>([]); // Ensure it's an empty array initially
@@ -138,7 +138,7 @@ export default function PostsPage() {
                         {post.title}
                       </h2>
                       <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
-                        {post.content}
+                      {post.description} {/* Changed from content to description */}
                       </p>
                       <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
                         <span>{post.author}</span>
