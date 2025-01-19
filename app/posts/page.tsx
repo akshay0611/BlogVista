@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { ModeToggle } from "@/components/ui/mode-toggle"
 
 type Post = {
   _id: string;
@@ -81,6 +82,7 @@ export default function PostsPage() {
               </Link>
             </motion.div>
           ))}
+           <ModeToggle />
         </nav>
       </motion.header>
       <main className="flex-1 container mx-auto px-4 py-8">

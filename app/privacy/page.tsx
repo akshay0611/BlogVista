@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Mountain, Lock, Shield, Eye, Database, Cookie, UserCheck, RefreshCw, Mail } from 'lucide-react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ModeToggle } from "@/components/ui/mode-toggle"
 
 export default function PrivacyPage() {
   const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -39,6 +40,7 @@ export default function PrivacyPage() {
               </Link>
             </motion.div>
           ))}
+          <ModeToggle />
         </nav>
       </motion.header>
       <main className="flex-1">
@@ -154,7 +156,7 @@ export default function PrivacyPage() {
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">© 2023 BlogVista. All rights reserved.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">© 2025 BlogVista. All rights reserved.</p>
           <nav className="flex gap-4 sm:gap-6 mt-4 sm:mt-0">
             <Link className="text-sm text-gray-600 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors" href="/terms">
               Terms of Service

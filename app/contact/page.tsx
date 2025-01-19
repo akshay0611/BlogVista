@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
+import { ModeToggle } from "@/components/ui/mode-toggle"
 
 export default function ContactPage() {
   return (
@@ -39,6 +40,7 @@ export default function ContactPage() {
               </Link>
             </motion.div>
           ))}
+            <ModeToggle />
         </nav>
       </motion.header>
       <main className="flex-1">
