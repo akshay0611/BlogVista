@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Mountain, Github, Twitter, Linkedin, Mail, MapPin, Users } from 'lucide-react'
+import { Mountain, Github, Twitter, Linkedin, Mail, Users } from 'lucide-react'
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -78,7 +78,7 @@ export default function AboutPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                BlogVista is more than just a platform; it's a community of passionate writers, thinkers, and readers. We're dedicated to sharing insightful articles, thought-provoking ideas, and engaging stories that inspire, educate, and entertain our global audience.
+                BlogVista 
               </motion.p>
               <motion.div
                 className="flex space-x-4"
