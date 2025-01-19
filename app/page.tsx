@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Mountain, ArrowRight, Mail, BookOpen, Users, Zap, Star } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { ModeToggle } from "@/components/ui/mode-toggle"
 
 export default function LandingPage() {
   return (
@@ -42,6 +43,7 @@ export default function LandingPage() {
               </Link>
             </motion.div>
           ))}
+          <ModeToggle />
         </nav>
       </motion.header>
       <main className="flex-1">
