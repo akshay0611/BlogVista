@@ -70,7 +70,7 @@ export default function BlogPostPage() {
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">© 2023 BlogVista. All rights reserved.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">© 2025 BlogVista. All rights reserved.</p>
         </div>
       </motion.footer>
     </div>

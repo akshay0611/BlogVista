@@ -111,7 +111,7 @@ export default function ContactPage() {
         transition={{ duration: 0.5 }}
       >
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">© 2023 BlogVista. All rights reserved.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">© 2025 BlogVista. All rights reserved.</p>
           <nav className="flex gap-4 sm:gap-6 mt-4 sm:mt-0">
             <Link className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors" href="/terms">
               Terms of Service
