@@ -48,7 +48,7 @@ export function Header() {
           transition={{ duration: 0.5, delay: 0.4 }} 
         >
           <Link
-            href="" // Link 
+            href="/admin/sign-in" // Updated link
             className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
           >
             <User className="h-6 w-6" /> 
