@@ -7,7 +7,7 @@ import { Mountain, Twitter, Linkedin, Mail, Users, ArrowUp } from "lucide-react"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
+import { Footer } from "@/components/Footer"
 
 export default function AboutPage() {
   const [showScrollTop, setShowScrollTop] = useState(false)
@@ -222,73 +222,9 @@ export default function AboutPage() {
 </div>
 </section>
 
-<section className="w-full py-12 md:py-24 lg:py-32 bg-blue-100 dark:bg-gray-800">
-          <div className="container mx-auto px-4 md:px-6">
-            <motion.div
-              className="flex flex-col items-center space-y-4 text-center"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-                  Subscribe to Our Newsletter
-                </h2>
-                <p className="mx-auto max-w-[600px] text-gray-600 md:text-xl dark:text-gray-300">
-                  Stay updated with our latest posts and insights. Join our growing community of readers.
-                </p>
-              </div>
-              <motion.div
-                className="w-full max-w-sm space-y-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <form className="flex space-x-2">
-                  <Input
-                    className="flex-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:focus:border-blue-400 dark:bg-gray-800 dark:text-white"
-                    placeholder="Enter your email"
-                    type="email"
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600"
-                  >
-                    <Mail className="mr-2 h-4 w-4" />
-                    Subscribe
-                  </Button>
-                </form>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
+
       </main>
-      <motion.footer
-        className="w-full py-6 px-4 md:px-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <div className="flex flex-col items-center sm:items-start mb-4 sm:mb-0">
-            <p className="text-sm text-gray-600 dark:text-gray-400">© 2025 BlogVista. All rights reserved.</p>
-          </div>
-          <nav className="flex gap-4 sm:gap-6">
-            <Link
-              className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
-              href="/terms"
-            >
-              Terms of Service
-            </Link>
-            <Link
-              className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
-              href="/privacy"
-            >
-              Privacy Policy
-            </Link>
-          </nav>
-        </div>
-      </motion.footer>
+      <Footer />
       {showScrollTop && (
         <motion.button
           className="fixed bottom-4 right-4 p-2 bg-blue-600 text-white rounded-full shadow-lg"

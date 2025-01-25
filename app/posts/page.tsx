@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ModeToggle } from "@/components/ui/mode-toggle"
+import { Footer } from "@/components/Footer"
 
 type Post = {
   _id: string;
@@ -195,6 +196,7 @@ export default function PostsPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }
