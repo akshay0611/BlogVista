@@ -67,24 +67,29 @@ export default function ContactPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <Card className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Contact Information</h2>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
-                        <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        <span>contact@blogvista.com</span>
-                      </div>
-                      <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
-                        <Phone className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        <span>+1 (555) 123-4567</span>
-                      </div>
-                      <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
-                        <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        <span>123 Blog Street, Content City, ST 12345</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+  <CardContent className="p-6">
+    <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Contact Information</h2>
+    <div className="space-y-4">
+      <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+        <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <a href="mailto:contact@blogvista.com" className="hover:underline">
+          contact@blogvista.com
+        </a>
+      </div>
+      <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+        <Phone className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <a href="tel:+15551234567" className="hover:underline">
+          +1 (555) 123-4567
+        </a>
+      </div>
+      <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+        <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <span>123 Blog Street, Content City, ST 12345</span>
+      </div>
+    </div>
+  </CardContent>
+</Card>
+
               </motion.div>
               <motion.form 
                 className="space-y-4"
