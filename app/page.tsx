@@ -245,7 +245,7 @@ export default function LandingPage() {
               >
                 <motion.div whileHover={{ rotateY: 5, rotateX: -5 }} transition={{ duration: 0.5 }}>
                   <Image
-                    src="/placeholder.svg?height=400&width=400&text=Author"
+                    src="/images/owner.jpg"
                     alt="Author"
                     width={400}
                     height={400}
@@ -262,7 +262,7 @@ export default function LandingPage() {
                   About the Author
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  Hi, I&apos;m Jane Doe, the creator of BlogVista. With over a decade of experience in various fields,
+                  Hi, I&apos;m Akshay Kumar, the creator of BlogVista.
                   I&apos;m passionate about sharing knowledge and inspiring others through my writing. My goal is to
                   create a platform where curiosity thrives and ideas flourish.
                 </p>
