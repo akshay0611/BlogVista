@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Mountain, ArrowRight, Search, Calendar } from 'lucide-react';
+import { ArrowRight, Search, Calendar } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Footer } from "@/components/Footer"
+import { Header } from "@/components/Header" 
 
 type Post = {
   _id: string;
@@ -80,32 +80,7 @@ export default function PostsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-      <motion.header
-        className="px-4 lg:px-6 h-16 flex items-center bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Link className="flex items-center justify-center" href="/">
-          <Mountain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-          <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">BlogVista</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          {['Home', 'About', 'Posts', 'Contact'].map((item, index) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Link className="text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors" href={`/${item.toLowerCase()}`}>
-                {item}
-              </Link>
-            </motion.div>
-          ))}
-          <ModeToggle />
-        </nav>
-      </motion.header>
+    <Header />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <motion.h1

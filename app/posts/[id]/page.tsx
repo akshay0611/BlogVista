@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { ArrowLeft, Calendar, Mountain, User, Tag } from "lucide-react"
+import { ArrowLeft, Calendar,User, Tag } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Footer } from "@/components/Footer"
+import { Header } from "@/components/Header" 
 
 type Post = {
   _id: string
@@ -101,31 +101,7 @@ export default function PostPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
-      <motion.header
-        className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link className="flex items-center justify-center" href="/">
-            <Mountain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">BlogVista</span>
-          </Link>
-          <nav className="hidden md:flex space-x-4">
-            {["Home", "About", "Posts", "Contact"].map((item) => (
-              <Link
-                key={item}
-                className="text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
-                href={`/${item.toLowerCase()}`}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
-          <ModeToggle />
-        </div>
-      </motion.header>
+      <Header />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
