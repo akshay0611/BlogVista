@@ -3,10 +3,9 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { Mountain, Github, Twitter, Linkedin, Mail, Users, ArrowUp } from "lucide-react"
+import { Mountain, Twitter, Linkedin, Mail, Users, ArrowUp } from "lucide-react"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 
@@ -200,10 +199,10 @@ export default function AboutPage() {
     <h3 className="text-2xl font-semibold mb-2">Akshay Kumar</h3>
     <p className="text-gray-600 dark:text-gray-400 mb-4">Blogger & Tech Enthusiast</p>
     <p className="text-gray-700 dark:text-gray-300 mb-6">
-      Hi there! I'm Akshay, the voice behind BlogVista. With a passion for technology and a knack for
-      simplifying complex concepts, I started this blog to share my journey and insights with you. When I'm
-      not writing, you can find me tinkering with the latest gadgets or exploring new productivity hacks.
-    </p>
+  Hi there! I&apos;m Akshay, the voice behind BlogVista. With a passion for technology and a knack for
+  simplifying complex concepts, I started this blog to share my journey and insights with you. When I&apos;m
+  not writing, you can find me tinkering with the latest gadgets or exploring new productivity hacks.
+</p>
     <div className="flex space-x-4">
       <Button asChild variant="outline">
         <Link href="https://x.com/Aksh0605">
