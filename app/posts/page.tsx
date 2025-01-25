@@ -19,7 +19,7 @@ type Post = {
   author: string;
   thumbnail: string;
   createdAt: string;
-  category: string; // Replaced updatedAt with category
+  category: string; 
 };
 
 // Define the badge colors for each category

@@ -4,10 +4,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Mountain, ArrowRight, BookOpen, Users, Zap, Star } from "lucide-react"
+import { Mountain, BookOpen, Users, Zap, Star } from "lucide-react"
 import { motion } from "framer-motion"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Footer } from "@/components/Footer"
+import { FeaturedPosts } from "@/components/FeaturedPosts"
 
 export default function LandingPage() {
   return (
@@ -94,51 +95,9 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-900">
-          <div className="container mx-auto px-4 md:px-6">
-            <motion.h2
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              Featured Posts
-            </motion.h2>
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <motion.div
-                  key={i}
-                  className="group relative rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50 group-hover:opacity-75 transition-opacity duration-300 ease-in-out"></div>
-                  <Image
-                    src={`/placeholder.svg?height=400&width=600&text=Blog+Post+${i}`}
-                    alt={`Blog post ${i} thumbnail`}
-                    className="object-cover w-full h-64"
-                    width={600}
-                    height={400}
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold mb-2 text-white">Exciting Blog Post {i}</h3>
-                    <p className="text-sm text-gray-200 mb-4">
-                      Dive into this captivating article that will expand your horizons and challenge your perspectives.
-                    </p>
-                    <Link
-                      className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium"
-                      href="/posts"
-                    >
-                      Read More <ArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+
+    {/* Featured Posts  */}
+    <FeaturedPosts />
         
 <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-gray-800 dark:to-gray-900">
   <div className="container mx-auto px-4 md:px-6">
