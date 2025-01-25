@@ -25,8 +25,10 @@ const BlogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  updatedAt: {
-    type: Date,
+  category: {
+    type: String,
+    required: [true, 'Category is required'],
+    enum: ['Technology', 'Lifestyle', 'Productivity'], // Allow only these categories
   },
   thumbnail: {
     type: String,
