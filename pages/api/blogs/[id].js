@@ -1,5 +1,3 @@
-// pages/api/blogs/[id].js
-
 import dbConnect from '@/lib/dbConnect';
 import Blog from '@/models/Blog';
 
@@ -21,8 +19,58 @@ export default async function handler(req, res) {
         res.status(400).json({ success: false, error: error.message });
       }
       break;
+
+    case 'PUT': // Update a blog post
+      try {
+        const {
+          title,
+          content,
+          slug,
+          author,
+          publishedAt,
+          featuredImage,
+          tags,
+          status,
+        } = req.body;
+
+        const updatedBlog = await Blog.findByIdAndUpdate(
+          id,
+          {
+            title,
+            content,
+            slug,
+            author,
+            publishedAt,
+            featuredImage,
+            tags,
+            status,
+          },
+          { new: true } // Return the updated document
+        );
+
+        if (!updatedBlog) {
+          return res.status(404).json({ success: false, error: 'Post not found' });
+        }
+        res.status(200).json({ success: true, data: updatedBlog });
+      } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+      }
+      break;
+
+    case 'DELETE': // Delete a blog post
+      try {
+        const deletedBlog = await Blog.findByIdAndDelete(id);
+        if (!deletedBlog) {
+          return res.status(404).json({ success: false, error: 'Post not found' });
+        }
+        res.status(200).json({ success: true, data: deletedBlog });
+      } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+      }
+      break;
+
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
       res.status(405).json({ success: false, error: `Method ${method} Not Allowed` });
       break;
   }

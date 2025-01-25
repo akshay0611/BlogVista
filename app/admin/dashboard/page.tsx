@@ -6,12 +6,32 @@ import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
 import { useSession } from "@/hooks/useSession"
 import type { User } from "@supabase/supabase-js"
-import { FileText, Users, LogOut, Plus, BarChart2, Mail } from "lucide-react"
+import { FileText, Users, LogOut, Plus, BarChart2, Mail, Save, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+
+interface Blog {
+  _id: string
+  title: string
+  content: string
+  createdAt: string
+}
+
+interface Subscriber {
+  _id: string
+  email: string
+  subscribedAt: string
+}
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<User | null>(null)
+  const [blogs, setBlogs] = useState<Blog[]>([])
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([])
+  const [editingBlogId, setEditingBlogId] = useState<string | null>(null)
+  const [editedTitle, setEditedTitle] = useState("")
+  const [editedContent, setEditedContent] = useState("")
   const router = useRouter()
 
   useSession()
@@ -27,11 +47,97 @@ export default function AdminDashboard() {
     }
 
     fetchUser()
+    fetchBlogs()
+    fetchSubscribers()
   }, [])
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await fetch("/api/blogs")
+      const data = await response.json()
+      if (data.success) {
+        setBlogs(data.data)
+      }
+    } catch (error) {
+      console.error("Failed to fetch blogs:", error)
+    }
+  }
+
+  const fetchSubscribers = async () => {
+    try {
+      const response = await fetch("/api/subscribers")
+      const data = await response.json()
+      if (data.success) {
+        setSubscribers(data.data)
+      }
+    } catch (error) {
+      console.error("Failed to fetch subscribers:", error)
+    }
+  }
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     router.push("/admin/sign-in")
+  }
+
+  const handleDeleteBlog = async (id: string) => {
+    try {
+      const response = await fetch(`/api/blogs/${id}`, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        setBlogs(blogs.filter((blog) => blog._id !== id))
+      }
+    } catch (error) {
+      console.error("Failed to delete blog:", error)
+    }
+  }
+
+  const handleDeleteSubscriber = async (id: string) => {
+    try {
+      const response = await fetch(`/api/subscribers/${id}`, {
+        method: "DELETE",
+      })
+      if (response.ok) {
+        setSubscribers(subscribers.filter((subscriber) => subscriber._id !== id))
+      }
+    } catch (error) {
+      console.error("Failed to delete subscriber:", error)
+    }
+  }
+
+  const startEditing = (blog: Blog) => {
+    setEditingBlogId(blog._id)
+    setEditedTitle(blog.title)
+    setEditedContent(blog.content)
+  }
+
+  const cancelEditing = () => {
+    setEditingBlogId(null)
+    setEditedTitle("")
+    setEditedContent("")
+  }
+
+  const saveEditing = async (id: string) => {
+    try {
+      const response = await fetch(`/api/blogs/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: editedTitle,
+          content: editedContent,
+        }),
+      })
+      if (response.ok) {
+        const updatedBlog = await response.json()
+        setBlogs(blogs.map((blog) => (blog._id === id ? updatedBlog.data : blog)))
+        cancelEditing()
+      }
+    } catch (error) {
+      console.error("Failed to update blog:", error)
+    }
   }
 
   if (!user) {
@@ -69,7 +175,7 @@ export default function AdminDashboard() {
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">25</div>
+                <div className="text-2xl font-bold">{blogs.length}</div>
                 <p className="text-xs text-muted-foreground">+2 from last week</p>
               </CardContent>
             </Card>
@@ -79,7 +185,7 @@ export default function AdminDashboard() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">1,234</div>
+                <div className="text-2xl font-bold">{subscribers.length}</div>
                 <p className="text-xs text-muted-foreground">+15% from last month</p>
               </CardContent>
             </Card>
@@ -106,64 +212,59 @@ export default function AdminDashboard() {
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <CardTitle>Blog Posts</CardTitle>
-                    <Button>
+                    <Button onClick={() => router.push("/admin/blogs/new")}>
                       <Plus className="mr-2 h-4 w-4" /> New Post
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                      <div className="flex items-center">
-                        <FileText className="mr-3 h-5 w-5 text-blue-500" />
-                        <div>
-                          <h3 className="font-medium">How to Get Started with React</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Published on June 1, 2023</p>
-                        </div>
+                    {blogs.map((blog) => (
+                      <div key={blog._id} className="flex flex-col p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                        {editingBlogId === blog._id ? (
+                          <>
+                            <Input
+                              value={editedTitle}
+                              onChange={(e) => setEditedTitle(e.target.value)}
+                              className="mb-4"
+                            />
+                            <Textarea
+                              value={editedContent}
+                              onChange={(e) => setEditedContent(e.target.value)}
+                              className="mb-4"
+                            />
+                            <div className="flex justify-end space-x-2">
+                              <Button onClick={() => saveEditing(blog._id)}>
+                                <Save className="mr-2 h-4 w-4" /> Save
+                              </Button>
+                              <Button variant="outline" onClick={cancelEditing}>
+                                <X className="mr-2 h-4 w-4" /> Cancel
+                              </Button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center">
+                                <FileText className="mr-3 h-5 w-5 text-blue-500" />
+                                <div>
+                                  <h3 className="font-medium">{blog.title}</h3>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">Created on {new Date(blog.createdAt).toLocaleDateString()}</p>
+                                </div>
+                              </div>
+                              <div>
+                                <Button variant="outline" size="sm" className="mr-2" onClick={() => startEditing(blog)}>
+                                  Edit
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => handleDeleteBlog(blog._id)}>
+                                  Delete
+                                </Button>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
-                      <div>
-                        <Button variant="outline" size="sm" className="mr-2">
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                      <div className="flex items-center">
-                        <FileText className="mr-3 h-5 w-5 text-blue-500" />
-                        <div>
-                          <h3 className="font-medium">10 Tips for Better SEO</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Published on May 15, 2023</p>
-                        </div>
-                      </div>
-                      <div>
-                        <Button variant="outline" size="sm" className="mr-2">
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                      <div className="flex items-center">
-                        <FileText className="mr-3 h-5 w-5 text-blue-500" />
-                        <div>
-                          <h3 className="font-medium">The Future of Web Development</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Published on May 1, 2023</p>
-                        </div>
-                      </div>
-                      <div>
-                        <Button variant="outline" size="sm" className="mr-2">
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
@@ -181,42 +282,20 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                      <div className="flex items-center">
-                        <Users className="mr-3 h-5 w-5 text-green-500" />
-                        <div>
-                          <h3 className="font-medium">john.doe@example.com</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Subscribed on June 5, 2023</p>
+                    {subscribers.map((subscriber) => (
+                      <div key={subscriber._id} className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                        <div className="flex items-center">
+                          <Users className="mr-3 h-5 w-5 text-green-500" />
+                          <div>
+                            <h3 className="font-medium">{subscriber.email}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Subscribed on {new Date(subscriber.subscribedAt).toLocaleDateString()}</p>
+                          </div>
                         </div>
+                        <Button variant="outline" size="sm" onClick={() => handleDeleteSubscriber(subscriber._id)}>
+                          Remove
+                        </Button>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Remove
-                      </Button>
-                    </div>
-                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                      <div className="flex items-center">
-                        <Users className="mr-3 h-5 w-5 text-green-500" />
-                        <div>
-                          <h3 className="font-medium">jane.smith@example.com</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Subscribed on May 28, 2023</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Remove
-                      </Button>
-                    </div>
-                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-                      <div className="flex items-center">
-                        <Users className="mr-3 h-5 w-5 text-green-500" />
-                        <div>
-                          <h3 className="font-medium">alex.johnson@example.com</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Subscribed on May 20, 2023</p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Remove
-                      </Button>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>

@@ -1,5 +1,3 @@
-// pages/api/blogs/index.js
-
 import dbConnect from '@/lib/dbConnect';
 import Blog from '@/models/Blog';
 
