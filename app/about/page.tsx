@@ -1,17 +1,34 @@
-'use client'
+"use client"
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Mountain, Github, Twitter, Linkedin, Mail, Users } from 'lucide-react'
+import { motion } from "framer-motion"
+import Image from "next/image"
+import Link from "next/link"
+import { Mountain, Github, Twitter, Linkedin, Mail, Users, ArrowUp } from "lucide-react"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { useState, useEffect } from "react"
+import { Input } from "@/components/ui/input"
 
 export default function AboutPage() {
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.pageYOffset > 300)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <motion.header 
+      <motion.header
         className="px-4 lg:px-6 h-16 flex items-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -19,14 +36,16 @@ export default function AboutPage() {
       >
         <Link className="flex items-center justify-center" href="/">
           <Mountain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-          <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">BlogVista</span>
+          <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+            BlogVista
+          </span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           {[
-            { name: 'Home', href: '/' },
-            { name: 'About', href: '/about' },
-            { name: 'Posts', href: '/posts' },
-            { name: 'Contact', href: '/contact' },
+            { name: "Home", href: "/" },
+            { name: "About", href: "/about" },
+            { name: "Posts", href: "/posts" },
+            { name: "Contact", href: "/contact" },
           ].map((item, index) => (
             <motion.div
               key={item.name}
@@ -34,18 +53,22 @@ export default function AboutPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Link className="text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors" href={item.href}>
+              <Link
+                className="text-sm font-medium text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
+                href={item.href}
+              >
                 {item.name}
               </Link>
             </motion.div>
           ))}
-           <ModeToggle />
+          <ModeToggle />
         </nav>
       </motion.header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 px-4 md:px-6">
-          <div className="container mx-auto">
-            <motion.div 
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 px-4 md:px-6 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
+          <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-700 [mask-image:linear-gradient(to_bottom,white,transparent)] z-0"></div>
+          <div className="container mx-auto relative z-10">
+            <motion.div
               className="flex flex-col items-center space-y-8 text-center"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -55,16 +78,13 @@ export default function AboutPage() {
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
+                whileHover={{ scale: 1.05, rotate: 5 }}
               >
-                <Image
-                  src="/placeholder.svg?height=200&width=200&text=BlogVista"
-                  alt="BlogVista Logo"
-                  width={200}
-                  height={200}
-                  className="rounded-full border-4 border-blue-500 shadow-lg"
-                />
+                <div className="flex items-center justify-center w-48 h-48 rounded-full border-4 border-blue-500 shadow-lg bg-white dark:bg-gray-800 ">
+                  <Mountain className="h-24 w-24 text-blue-600 dark:text-blue-400" />
+                </div>
               </motion.div>
-              <motion.h1 
+              <motion.h1
                 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -72,36 +92,20 @@ export default function AboutPage() {
               >
                 About BlogVista
               </motion.h1>
-              <motion.p 
+              <motion.p
                 className="mx-auto max-w-[700px] text-gray-600 md:text-xl dark:text-gray-300"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                BlogVista 
+                Exploring technology, lifestyle, and productivity through the lens of a passionate blogger.
               </motion.p>
               <motion.div
-                className="flex space-x-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
-                <Link href="https://github.com" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
-                  <Github className="h-6 w-6" />
-                </Link>
-                <Link href="https://twitter.com" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
-                  <Twitter className="h-6 w-6" />
-                </Link>
-                <Link href="https://linkedin.com" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
-                  <Linkedin className="h-6 w-6" />
-                </Link>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <Button asChild>
+                <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
                   <Link href="/contact">Get in Touch</Link>
                 </Button>
               </motion.div>
@@ -110,38 +114,57 @@ export default function AboutPage() {
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-blue-100 dark:bg-gray-800">
           <div className="container mx-auto px-4 md:px-6">
-            <motion.h2 
+            <motion.h2
               className="text-3xl font-bold tracking-tighter sm:text-4xl text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Our Journey
+              Welcome to BlogVista
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="mx-auto max-w-[700px] text-gray-600 md:text-lg dark:text-gray-300 text-center leading-relaxed mb-12"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Founded in 2023, BlogVista started as a small personal blog and has since grown into a vibrant community of writers and readers. We believe in the power of words to change perspectives, spark conversations, and drive positive change in the world.
+              BlogVista is my personal corner on the internet where I share stories, insights, and reflections on
+              technology, lifestyle, and productivity. Established in 2023, it is a space where my thoughts find their
+              voice and my experiences are brought to life through words.
             </motion.p>
-            <motion.div 
+            <motion.div
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               {[
-                { title: "Our Mission", description: "To inspire and educate through compelling content, fostering a global community of lifelong learners and critical thinkers.", icon: Users },
-                { title: "Our Vision", description: "To become the go-to platform for insightful and diverse perspectives, shaping the future of digital discourse and knowledge sharing.", icon: Mountain },
-                { title: "Our Values", description: "Integrity in our content, creativity in our approach, and unwavering commitment to community engagement and empowerment.", icon: Mail }
+                {
+                  title: "Technology",
+                  description:
+                    "Stay updated with the latest tech trends and innovations as I explore and share insights on the ever-evolving tech landscape.",
+                  icon: Users,
+                },
+                {
+                  title: "Lifestyle",
+                  description:
+                    "Discover tips and ideas for living a balanced and fulfilling life, drawn from my personal experiences and reflections.",
+                  icon: Mountain,
+                },
+                {
+                  title: "Productivity",
+                  description:
+                    "Learn how to maximize efficiency and achieve more through practical tips, tools, and strategies that have worked for me.",
+                  icon: Mail,
+                },
               ].map((item, index) => (
-                <motion.div 
+                <motion.div
                   key={index}
-                  className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
+                  className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md transition-all duration-300 ease-in-out"
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                  }}
                 >
                   <div className="flex items-center mb-4">
                     <item.icon className="h-8 w-8 text-blue-600 dark:text-blue-400 mr-2" />
@@ -153,91 +176,95 @@ export default function AboutPage() {
             </motion.div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32">
+
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4 md:px-6">
-            <motion.h2 
+            <motion.h2
               className="text-3xl font-bold tracking-tighter sm:text-4xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Meet Our Team
+              Meet the Author
             </motion.h2>
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              {[
-                { name: "Jane Doe", role: "Founder & Editor-in-Chief", image: "/placeholder.svg?height=300&width=300&text=Jane" },
-                { name: "John Smith", role: "Lead Developer", image: "/placeholder.svg?height=300&width=300&text=John" },
-                { name: "Emily Brown", role: "Content Strategist", image: "/placeholder.svg?height=300&width=300&text=Emily" }
-              ].map((member, index) => (
-                <Card key={index}>
-                  <CardContent className="p-6 flex flex-col items-center text-center">
-                    <Image
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.name}
-                      width={150}
-                      height={150}
-                      className="rounded-full mb-4"
-                    />
-                    <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{member.role}</p>
-                    <div className="flex space-x-2">
-                      <Link href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
-                        <Twitter className="h-5 w-5" />
-                      </Link>
-                      <Link href="#" className="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">
-                        <Linkedin className="h-5 w-5" />
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-blue-50 dark:bg-gray-900">
+            <motion.div
+  className="flex flex-col md:flex-row items-center justify-center gap-8"
+  initial={{ opacity: 0, y: 50 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.2 }}
+>
+  <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+    <Image src="/images/owner.jpg" alt="Author" width={300} height={300} />
+  </motion.div>
+  <div className="max-w-md">
+    <h3 className="text-2xl font-semibold mb-2">Akshay Kumar</h3>
+    <p className="text-gray-600 dark:text-gray-400 mb-4">Blogger & Tech Enthusiast</p>
+    <p className="text-gray-700 dark:text-gray-300 mb-6">
+      Hi there! I'm Akshay, the voice behind BlogVista. With a passion for technology and a knack for
+      simplifying complex concepts, I started this blog to share my journey and insights with you. When I'm
+      not writing, you can find me tinkering with the latest gadgets or exploring new productivity hacks.
+    </p>
+    <div className="flex space-x-4">
+      <Button asChild variant="outline">
+        <Link href="https://x.com/Aksh0605">
+          <Twitter className="h-5 w-5 mr-2" />
+          Follow on Twitter
+        </Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href="https://www.linkedin.com/in/akshaykumar0611/">
+          <Linkedin className="h-5 w-5 mr-2" />
+          Connect on LinkedIn
+        </Link>
+      </Button>
+    </div>
+  </div>
+</motion.div>
+</div>
+</section>
+
+<section className="w-full py-12 md:py-24 lg:py-32 bg-blue-100 dark:bg-gray-800">
           <div className="container mx-auto px-4 md:px-6">
-            <motion.h2 
-              className="text-3xl font-bold tracking-tighter sm:text-4xl text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
+            <motion.div
+              className="flex flex-col items-center space-y-4 text-center"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Join Our Community
-            </motion.h2>
-            <motion.div 
-              className="flex flex-col md:flex-row items-center justify-center gap-8"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Card className="w-full md:w-1/3">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">Write for Us</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">Share your expertise and insights with our growing community of readers.</p>
-                  <Button asChild>
-                    <Link href="/write-for-us">Learn More</Link>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                  Subscribe to Our Newsletter
+                </h2>
+                <p className="mx-auto max-w-[600px] text-gray-600 md:text-xl dark:text-gray-300">
+                  Stay updated with our latest posts and insights. Join our growing community of readers.
+                </p>
+              </div>
+              <motion.div
+                className="w-full max-w-sm space-y-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <form className="flex space-x-2">
+                  <Input
+                    className="flex-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:focus:border-blue-400 dark:bg-gray-800 dark:text-white"
+                    placeholder="Enter your email"
+                    type="email"
+                  />
+                  <Button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600"
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Subscribe
                   </Button>
-                </CardContent>
-              </Card>
-              <Card className="w-full md:w-1/3">
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">Subscribe</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">Get our latest articles and updates delivered straight to your inbox.</p>
-                  <Button asChild>
-                    <Link href="/subscribe">Subscribe Now</Link>
-                  </Button>
-                </CardContent>
-              </Card>
+                </form>
+              </motion.div>
             </motion.div>
           </div>
         </section>
       </main>
-      <motion.footer 
+      <motion.footer
         className="w-full py-6 px-4 md:px-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -248,15 +275,34 @@ export default function AboutPage() {
             <p className="text-sm text-gray-600 dark:text-gray-400">© 2025 BlogVista. All rights reserved.</p>
           </div>
           <nav className="flex gap-4 sm:gap-6">
-            <Link className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors" href="/terms">
+            <Link
+              className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+              href="/terms"
+            >
               Terms of Service
             </Link>
-            <Link className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors" href="/privacy">
+            <Link
+              className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+              href="/privacy"
+            >
               Privacy Policy
             </Link>
           </nav>
         </div>
       </motion.footer>
+      {showScrollTop && (
+        <motion.button
+          className="fixed bottom-4 right-4 p-2 bg-blue-600 text-white rounded-full shadow-lg"
+          onClick={scrollToTop}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <ArrowUp className="h-6 w-6" />
+        </motion.button>
+      )}
     </div>
   )
 }
