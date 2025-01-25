@@ -24,12 +24,13 @@ export default async function handler(req, res) {
       try {
         const {
           title,
+          description,
           content,
           slug,
           author,
           publishedAt,
-          featuredImage,
-          tags,
+          thumbnail, 
+          category,
           status,
         } = req.body;
 
@@ -37,12 +38,13 @@ export default async function handler(req, res) {
           id,
           {
             title,
+            description, // Add this
             content,
             slug,
             author,
             publishedAt,
-            featuredImage,
-            tags,
+            thumbnail, 
+            category,
             status,
           },
           { new: true } // Return the updated document

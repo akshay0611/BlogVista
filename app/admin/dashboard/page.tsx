@@ -15,7 +15,11 @@ import { Textarea } from "@/components/ui/textarea"
 interface Blog {
   _id: string
   title: string
+  description: string
   content: string
+  author: string
+  category: string
+  thumbnail: string
   createdAt: string
 }
 
@@ -31,7 +35,11 @@ export default function AdminDashboard() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
   const [editingBlogId, setEditingBlogId] = useState<string | null>(null)
   const [editedTitle, setEditedTitle] = useState("")
+  const [editedDescription, setEditedDescription] = useState("")
   const [editedContent, setEditedContent] = useState("")
+  const [editedAuthor, setEditedAuthor] = useState("")
+  const [editedCategory, setEditedCategory] = useState("")
+  const [editedThumbnail, setEditedThumbnail] = useState("")
   const router = useRouter()
 
   useSession()
@@ -109,13 +117,21 @@ export default function AdminDashboard() {
   const startEditing = (blog: Blog) => {
     setEditingBlogId(blog._id)
     setEditedTitle(blog.title)
+    setEditedDescription(blog.description)
     setEditedContent(blog.content)
+    setEditedAuthor(blog.author)
+    setEditedCategory(blog.category)
+    setEditedThumbnail(blog.thumbnail)
   }
 
   const cancelEditing = () => {
     setEditingBlogId(null)
     setEditedTitle("")
+    setEditedDescription("")
     setEditedContent("")
+    setEditedAuthor("")
+    setEditedCategory("")
+    setEditedThumbnail("")
   }
 
   const saveEditing = async (id: string) => {
@@ -127,7 +143,11 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify({
           title: editedTitle,
+          description: editedDescription,
           content: editedContent,
+          author: editedAuthor,
+          category: editedCategory,
+          thumbnail: editedThumbnail,
         }),
       })
       if (response.ok) {
@@ -227,11 +247,37 @@ export default function AdminDashboard() {
                               value={editedTitle}
                               onChange={(e) => setEditedTitle(e.target.value)}
                               className="mb-4"
+                              placeholder="Title"
+                            />
+                            <Input
+                              value={editedDescription}
+                              onChange={(e) => setEditedDescription(e.target.value)}
+                              className="mb-4"
+                              placeholder="Description"
                             />
                             <Textarea
                               value={editedContent}
                               onChange={(e) => setEditedContent(e.target.value)}
                               className="mb-4"
+                              placeholder="Content"
+                            />
+                            <Input
+                              value={editedAuthor}
+                              onChange={(e) => setEditedAuthor(e.target.value)}
+                              className="mb-4"
+                              placeholder="Author"
+                            />
+                            <Input
+                              value={editedCategory}
+                              onChange={(e) => setEditedCategory(e.target.value)}
+                              className="mb-4"
+                              placeholder="Category"
+                            />
+                            <Input
+                              value={editedThumbnail}
+                              onChange={(e) => setEditedThumbnail(e.target.value)}
+                              className="mb-4"
+                              placeholder="Thumbnail URL"
                             />
                             <div className="flex justify-end space-x-2">
                               <Button onClick={() => saveEditing(blog._id)}>
@@ -250,6 +296,12 @@ export default function AdminDashboard() {
                                 <div>
                                   <h3 className="font-medium">{blog.title}</h3>
                                   <p className="text-sm text-gray-500 dark:text-gray-400">Created on {new Date(blog.createdAt).toLocaleDateString()}</p>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">Author: {blog.author}</p>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">Category: {blog.category}</p>
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">Description: {blog.description}</p>
+                                  {blog.thumbnail && (
+                                    <img src={blog.thumbnail} alt="Thumbnail" className="mt-2 w-20 h-20 object-cover rounded" />
+                                  )}
                                 </div>
                               </div>
                               <div>
