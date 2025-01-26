@@ -16,10 +16,10 @@ export default async function handler(req, res) {
         "Welcome to My Blog!",
         `
           <div style="font-family: Arial, sans-serif; color: #333;">
-            <h1 style="color: #2563eb;">Welcome to My Blog!</h1>
+            <h1 style="color: #2563eb;">Welcome to Blog Vista!</h1>
             <p>Hi there,</p>
-            <p>Thank you for subscribing to my blog! I'm so excited to have you here as part of my journey.</p>
-            <p>This blog is a personal space where I share my thoughts, experiences, and ideas on topics that matter to me. From life lessons and creative projects to travel stories and personal growth, I hope my posts inspire, entertain, and resonate with you.</p>
+            <p>Thank you for subscribing to my Blog Vista! I'm so excited to have you here as part of my journey.</p>
+            <p>This blog is a personal space where I share my thoughts, experiences, and ideas on topics that matter to me. From technology and productivity to lifestyle and personal growth, I hope my posts inspire, entertain, and resonate with you.</p>
             <p>Here’s what you can look forward to:</p>
             <ul>
               <li><strong>Personal stories:</strong> Dive into my experiences and reflections on life.</li>
@@ -31,9 +31,9 @@ export default async function handler(req, res) {
             <p>If you ever have any thoughts, questions, or just want to say hi, feel free to reply to this email. I'd love to hear from you!</p>
             <p>Thanks again for subscribing. I can't wait to share my journey with you.</p>
             <p>Warm regards,</p>
-            <p><strong>[Your Name]</strong></p>
+            <p><strong>Akshay Kumar</strong></p>
             <hr style="border: 0; border-top: 1px solid #ddd;">
-            <p style="font-size: 0.9em; color: #777;">You're receiving this email because you subscribed to my blog. </a>.</p>
+            <p style="font-size: 0.9em; color: #777;">You're receiving this email because you subscribed to my Blog Vista. </a>.</p>
           </div>
         `
       );
