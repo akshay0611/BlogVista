@@ -40,6 +40,16 @@ export default function AdminDashboard() {
   const [editedAuthor, setEditedAuthor] = useState("")
   const [editedCategory, setEditedCategory] = useState("")
   const [editedThumbnail, setEditedThumbnail] = useState("")
+  const [newBlogData, setNewBlogData] = useState({
+    title: "",
+    description: "",
+    content: "",
+    author: "Akshay Kumar",
+    category: "Technology",
+    thumbnail: "https://via.placeholder.com/150",
+  })
+  const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const router = useRouter()
 
   useSession()
@@ -90,27 +100,37 @@ export default function AdminDashboard() {
 
   const handleDeleteBlog = async (id: string) => {
     try {
+      setLoading(true)
       const response = await fetch(`/api/blogs/${id}`, {
         method: "DELETE",
       })
       if (response.ok) {
         setBlogs(blogs.filter((blog) => blog._id !== id))
+        setSuccessMessage("Blog deleted successfully!")
+        setTimeout(() => setSuccessMessage(null), 3000)
       }
     } catch (error) {
       console.error("Failed to delete blog:", error)
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleDeleteSubscriber = async (id: string) => {
     try {
+      setLoading(true)
       const response = await fetch(`/api/subscribers/${id}`, {
         method: "DELETE",
       })
       if (response.ok) {
         setSubscribers(subscribers.filter((subscriber) => subscriber._id !== id))
+        setSuccessMessage("Subscriber removed successfully!")
+        setTimeout(() => setSuccessMessage(null), 3000)
       }
     } catch (error) {
       console.error("Failed to delete subscriber:", error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -136,6 +156,7 @@ export default function AdminDashboard() {
 
   const saveEditing = async (id: string) => {
     try {
+      setLoading(true)
       const response = await fetch(`/api/blogs/${id}`, {
         method: "PUT",
         headers: {
@@ -153,10 +174,46 @@ export default function AdminDashboard() {
       if (response.ok) {
         const updatedBlog = await response.json()
         setBlogs(blogs.map((blog) => (blog._id === id ? updatedBlog.data : blog)))
+        setSuccessMessage("Blog updated successfully!")
+        setTimeout(() => setSuccessMessage(null), 3000)
         cancelEditing()
       }
     } catch (error) {
       console.error("Failed to update blog:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCreateBlog = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch("/api/blogs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newBlogData),
+      })
+
+      if (response.ok) {
+        const newBlog = await response.json()
+        setBlogs([...blogs, newBlog.data])
+        setSuccessMessage("Blog created successfully!")
+        setTimeout(() => setSuccessMessage(null), 3000)
+        setNewBlogData({
+          title: "",
+          description: "",
+          content: "",
+          author: "Akshay Kumar",
+          category: "Technology",
+          thumbnail: "https://via.placeholder.com/150",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to create blog:", error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -185,6 +242,13 @@ export default function AdminDashboard() {
           </div>
         </div>
       </nav>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded shadow-lg">
+          {successMessage}
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
@@ -232,13 +296,46 @@ export default function AdminDashboard() {
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <CardTitle>Blog Posts</CardTitle>
-                    <Button onClick={() => router.push("/admin/blogs/new")}>
-                      <Plus className="mr-2 h-4 w-4" /> New Post
-                    </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
+                    <div className="flex flex-col p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+                      <Input
+                        value={newBlogData.title}
+                        onChange={(e) => setNewBlogData({ ...newBlogData, title: e.target.value })}
+                        placeholder="Title"
+                        className="mb-4"
+                      />
+                      <Input
+                        value={newBlogData.description}
+                        onChange={(e) => setNewBlogData({ ...newBlogData, description: e.target.value })}
+                        placeholder="Description"
+                        className="mb-4"
+                      />
+                      <Textarea
+                        value={newBlogData.content}
+                        onChange={(e) => setNewBlogData({ ...newBlogData, content: e.target.value })}
+                        placeholder="Content"
+                        className="mb-4"
+                      />
+                      <select
+                        value={newBlogData.category}
+                        onChange={(e) => setNewBlogData({ ...newBlogData, category: e.target.value })}
+                        className="p-2 border rounded w-full mb-4"
+                      >
+                        <option value="Technology">Technology</option>
+                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Health">Health</option>
+                        <option value="Travel">Travel</option>
+                        <option value="General">General</option>
+                      </select>
+                      <Button onClick={handleCreateBlog} disabled={loading}>
+                        {loading ? "Creating..." : "Create Blog"}
+                        <Plus className="mr-2 h-4 w-4" />
+                      </Button>
+                    </div>
+
                     {blogs.map((blog) => (
                       <div key={blog._id} className="flex flex-col p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
                         {editingBlogId === blog._id ? (
@@ -280,8 +377,9 @@ export default function AdminDashboard() {
                               placeholder="Thumbnail URL"
                             />
                             <div className="flex justify-end space-x-2">
-                              <Button onClick={() => saveEditing(blog._id)}>
-                                <Save className="mr-2 h-4 w-4" /> Save
+                              <Button onClick={() => saveEditing(blog._id)} disabled={loading}>
+                                {loading ? "Saving..." : "Save"}
+                                <Save className="mr-2 h-4 w-4" />
                               </Button>
                               <Button variant="outline" onClick={cancelEditing}>
                                 <X className="mr-2 h-4 w-4" /> Cancel
@@ -308,8 +406,8 @@ export default function AdminDashboard() {
                                 <Button variant="outline" size="sm" className="mr-2" onClick={() => startEditing(blog)}>
                                   Edit
                                 </Button>
-                                <Button variant="outline" size="sm" onClick={() => handleDeleteBlog(blog._id)}>
-                                  Delete
+                                <Button variant="outline" size="sm" onClick={() => handleDeleteBlog(blog._id)} disabled={loading}>
+                                  {loading ? "Deleting..." : "Delete"}
                                 </Button>
                               </div>
                             </div>
@@ -343,8 +441,8 @@ export default function AdminDashboard() {
                             <p className="text-sm text-gray-500 dark:text-gray-400">Subscribed on {new Date(subscriber.subscribedAt).toLocaleDateString()}</p>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleDeleteSubscriber(subscriber._id)}>
-                          Remove
+                        <Button variant="outline" size="sm" onClick={() => handleDeleteSubscriber(subscriber._id)} disabled={loading}>
+                          {loading ? "Removing..." : "Remove"}
                         </Button>
                       </div>
                     ))}

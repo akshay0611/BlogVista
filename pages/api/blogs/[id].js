@@ -20,6 +20,39 @@ export default async function handler(req, res) {
       }
       break;
 
+    case 'POST': // Create a new blog post
+      try {
+        const {
+          title,
+          description,
+          content,
+          slug,
+          author,
+          publishedAt,
+          thumbnail,
+          category,
+          status,
+        } = req.body;
+
+        // Create a new blog post
+        const newBlog = await Blog.create({
+          title,
+          description,
+          content,
+          slug,
+          author,
+          publishedAt,
+          thumbnail,
+          category,
+          status,
+        });
+
+        res.status(201).json({ success: true, data: newBlog });
+      } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+      }
+      break;
+
     case 'PUT': // Update a blog post
       try {
         const {
@@ -29,7 +62,7 @@ export default async function handler(req, res) {
           slug,
           author,
           publishedAt,
-          thumbnail, 
+          thumbnail,
           category,
           status,
         } = req.body;
@@ -38,12 +71,12 @@ export default async function handler(req, res) {
           id,
           {
             title,
-            description, // Add this
+            description,
             content,
             slug,
             author,
             publishedAt,
-            thumbnail, 
+            thumbnail,
             category,
             status,
           },
@@ -72,7 +105,7 @@ export default async function handler(req, res) {
       break;
 
     default:
-      res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
+      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
       res.status(405).json({ success: false, error: `Method ${method} Not Allowed` });
       break;
   }
