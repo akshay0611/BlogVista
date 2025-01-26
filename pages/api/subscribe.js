@@ -1,3 +1,4 @@
+// pages/api/subscribe.js
 import sendEmail from "../../lib/sendEmail";
 
 export default async function handler(req, res) {
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
               <li><strong>Thoughtful discussions:</strong> Join me in exploring ideas and perspectives.</li>
             </ul>
             <p>To get started, why not check out some of my recent posts?</p>
-            <a href="http://localhost:3000/posts" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: #fff; text-decoration: none; border-radius: 5px;">Explore My Blog</a>
+            <a href="https://blog-vista-iota.vercel.app/posts" style="display: inline-block; padding: 10px 20px; background-color: #2563eb; color: #fff; text-decoration: none; border-radius: 5px;">Explore My Blog</a>
             <p>If you ever have any thoughts, questions, or just want to say hi, feel free to reply to this email. I'd love to hear from you!</p>
             <p>Thanks again for subscribing. I can't wait to share my journey with you.</p>
             <p>Warm regards,</p>
