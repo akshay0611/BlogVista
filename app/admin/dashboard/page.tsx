@@ -319,6 +319,13 @@ export default function AdminDashboard() {
                         placeholder="Content"
                         className="mb-4"
                       />
+                      {/* Thumbnail URL Input */}
+  <Input
+    value={newBlogData.thumbnail}
+    onChange={(e) => setNewBlogData({ ...newBlogData, thumbnail: e.target.value })}
+    placeholder="Thumbnail URL"
+    className="mb-4"
+  />
                       <select
                         value={newBlogData.category}
                         onChange={(e) => setNewBlogData({ ...newBlogData, category: e.target.value })}
