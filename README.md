@@ -1,6 +1,8 @@
 # BlogVista 🌐
 
-**BlogVista** is my personal corner on the internet where I share stories, insights, and reflections on technology, lifestyle, and productivity. Established in 2023, it serves as a platform where my thoughts find their voice, and my experiences are brought to life through words. ✍️
+**BlogVista** is my personal corner on the internet where I share stories, insights, and reflections on technology, lifestyle, and productivity. Established in 2025, it serves as a platform where my thoughts find their voice, and my experiences are brought to life through words. ✍️
+
+![BlogVista Logo](public/images/BlogVista.png)
 
 ## About BlogVista 📝
 
