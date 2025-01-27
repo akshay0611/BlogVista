@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Search, Trash2 } from "lucide-react"
+import { Search } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -15,7 +14,6 @@ interface Subscriber {
 
 export default function ManageSubscribers() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
-  const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
@@ -34,30 +32,6 @@ export default function ManageSubscribers() {
       console.error("Failed to fetch subscribers:", error)
       setSuccessMessage("Failed to fetch subscribers. Please try again.")
       setTimeout(() => setSuccessMessage(null), 3000)
-    }
-  }
-
-  const handleDeleteSubscriber = async (id: string) => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/subscribe`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      })
-      if (response.ok) {
-        setSubscribers(subscribers.filter((subscriber) => subscriber._id !== id))
-        setSuccessMessage("Subscriber removed successfully!")
-        setTimeout(() => setSuccessMessage(null), 3000)
-      }
-    } catch (error) {
-      console.error("Failed to delete subscriber:", error)
-      setSuccessMessage("Failed to remove subscriber. Please try again.")
-      setTimeout(() => setSuccessMessage(null), 3000)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -101,7 +75,6 @@ export default function ManageSubscribers() {
                     <TableRow>
                       <TableHead>Email</TableHead>
                       <TableHead>Subscribed On</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -109,16 +82,6 @@ export default function ManageSubscribers() {
                       <TableRow key={subscriber._id}>
                         <TableCell className="font-medium">{subscriber.email}</TableCell>
                         <TableCell>{new Date(subscriber.createdAt).toLocaleDateString()}</TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteSubscriber(subscriber._id)}
-                            disabled={loading}
-                          >
-                            <Trash2 className="h-4 w-4 text-red-500" />
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
