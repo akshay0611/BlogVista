@@ -57,10 +57,10 @@ export default function AdminDashboard() {
 
   const fetchSubscribersCount = async () => {
     try {
-      const response = await fetch("/api/subscribers")
+      const response = await fetch("/api/subscribe")
       const data = await response.json()
       if (data.success) {
-        setSubscribersCount(data.data.length)
+        setSubscribersCount(data.data.length) // Update the subscribers count
       }
     } catch (error) {
       console.error("Failed to fetch subscribers count:", error)
