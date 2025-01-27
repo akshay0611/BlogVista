@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 interface Subscriber {
   _id: string
   email: string
-  subscribedAt: string
+  createdAt: string
 }
 
 export default function ManageSubscribers() {
@@ -25,7 +25,7 @@ export default function ManageSubscribers() {
 
   const fetchSubscribers = async () => {
     try {
-      const response = await fetch("/api/subscribers")
+      const response = await fetch("/api/subscribe")
       const data = await response.json()
       if (data.success) {
         setSubscribers(data.data)
@@ -40,8 +40,12 @@ export default function ManageSubscribers() {
   const handleDeleteSubscriber = async (id: string) => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/subscribers/${id}`, {
+      const response = await fetch(`/api/subscribe`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
       })
       if (response.ok) {
         setSubscribers(subscribers.filter((subscriber) => subscriber._id !== id))
@@ -104,7 +108,7 @@ export default function ManageSubscribers() {
                     {filteredSubscribers.map((subscriber) => (
                       <TableRow key={subscriber._id}>
                         <TableCell className="font-medium">{subscriber.email}</TableCell>
-                        <TableCell>{new Date(subscriber.subscribedAt).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(subscriber.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell className="text-right">
                           <Button
                             variant="ghost"
